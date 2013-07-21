@@ -1,6 +1,7 @@
 /*
  Safran visuals v2 based on:
  
+ 
  ------------------------------------------
  Get acceleration data from Chronos watch.
  Taken from info posted at: http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/f/166/t/32714.aspx
@@ -34,8 +35,11 @@
  
  Modications made by Oliver Smith to provide graphics 
  http://chemicaloliver.net
-*/
+ -----------------------------------------------
  
+ and code from https://gist.github.com/cjimmy/b5a36b689365498506d6
+ */
+
 import processing.video.*;
 import processing.serial.*;
 
@@ -56,6 +60,7 @@ int stopAccessPointNum[] = {
   255, 7, 3, 255, 9, 3
 };
 
+boolean justStarted = false;
 //Convert it all to bytes so that watch will understand
 //what we're talking about..
 byte startAccessPoint[] = byte(startAccessPointNum);
@@ -81,6 +86,7 @@ void setup() {
   //Until the port is still availible...
   //Send data request to chronos.
   chronos.write(accDataRequest);
+  justStarted = true;
 } 
 
 float angle = 0;
@@ -90,17 +96,17 @@ float oldX=0, oldY=0, oldZ=0;
 
 void unjitter(PVector vec) {
   /*float tmp;
-  tmp = vec.x;
-  vec.x = 9*vec.x + 0.5 * oldX;
-  oldX = vec.x;
-  
-  tmp = vec.y;
-  vec.y = 9*vec.y + 0.5 * oldY;
-  oldY = vec.y;
-  
-  tmp = vec.z;
-  vec.z = 9*vec.z + 0.5 * oldZ;
-  oldZ = vec.z;*/
+   tmp = vec.x;
+   vec.x = 9*vec.x + 0.5 * oldX;
+   oldX = vec.x;
+   
+   tmp = vec.y;
+   vec.y = 9*vec.y + 0.5 * oldY;
+   oldY = vec.y;
+   
+   tmp = vec.z;
+   vec.z = 9*vec.z + 0.5 * oldZ;
+   oldZ = vec.z;*/
 }
 
 void draw() {
@@ -109,36 +115,45 @@ void draw() {
     byte[] buf = new byte[7];  
     //boolean gotInvalidData = false;
     /*for (int i = 0; i < 7; i++) {
-      int data = chronos.read();
-     /* if(data == -1) {
-        gotInvalidData = true;
-      }/
-      buf[i] = (byte)data;
-    }*/
+     int data = chronos.read();
+    /* if(data == -1) {
+     gotInvalidData = true;
+     }/
+     buf[i] = (byte)data;
+     }*/
+    // this is a hack that reads the first three bytes
+    // to get the normal 7-byte reading aligned.
+    // For some reason, it repeats the first three bytes on program startup
+    // NOTE: It may not happen to you. just delete this block if so.
+    if (justStarted) {
+      justStarted = false;
+      byte[] dummyBuffer = new byte[3];
+      chronos.readBytes(dummyBuffer);
+      println(dummyBuffer);
+    }
+
     for (int i = 0; i < 7; i++) {
       buf[i] = (byte)chronos.read();
     }
-    
-    if (buf[3] == 1) {
-     /* PVector vec = new PVector(buf[4], buf[5], buf[6]);
-      unjitter(vec);*/
-      
-      byte x = buf[4];
-      angleSlope += map(x, -128, 127, -4.0, 4.0);
-      
 
+
+    if (buf[3] == 1) {
+      /* PVector vec = new PVector(buf[4], buf[5], buf[6]);
+       unjitter(vec);*/
+
+      byte x = buf[4];
+      //angleSlope += map(x, -128, 127, -4.0, 4.0);
+      angle = map(x, -128, 127, 0, 360);
+      println(angle);
 
       //draw y line
       byte y = buf[5];
-      
+
       //draw z line
       byte z = buf[6];
       println("x" + x + " y" + y + " z"+z);
-    } else {
-      chronos.write(accDataRequest);
     }
-    angle += angleSlope;
-    angleSlope = angleSlope;
+    chronos.write(accDataRequest);
   }
 
   if (cam1.available()) {
