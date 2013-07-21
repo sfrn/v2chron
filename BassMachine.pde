@@ -2,7 +2,7 @@ class BassMachine {
   float avgValue = 0, h = 0, s = 0, b = 0;
  
   void drawFreqBackground(float average) {
-    if(average > 20 && average > avgValue * 1.5) {
+    if(average > 20 && average > avgValue * 2) {
       //if(avgValue == 0) avgValue = average;
       //else avgValue = avgValue * 1.1;
       avgValue = average;

@@ -43,7 +43,7 @@
 import processing.video.*;
 import processing.serial.*;
 
-
+PImage headImage;
 
 Capture cam1;
 
@@ -80,8 +80,14 @@ void setup() {
   cam1 = new Capture(this, 320, 240, 15);
   cam1.start();
   
+  println("live?");
   live = new LiveSound();
+  println("live ok");
   bassMachine = new BassMachine();
+  println("bass ok");
+  
+  headImage = loadImage("./Plane_Kopf600.png");
+  headImage.resize(width, height);
 
   System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
   println(Serial.list());
@@ -89,7 +95,6 @@ void setup() {
 
   //Start the access point..
   chronos.write(startAccessPoint);
-
 
   //Until the port is still availible...
   //Send data request to chronos.
@@ -190,8 +195,12 @@ void draw() {
   }
   PImage im = cam1.get();
   
-  im.resize(1024, 768);
+  im.resize(width, height);
   im.filter(THRESHOLD, threshold);
+  if(live.fft.calcAvg(0, 100) > 20) {
+    im.blend(headImage, 0, 0, width, height,  0, 0, width, height, LIGHTEST);
+  }
+  
   translate(width/2, height/2);
   //println("my angle is " + angle);
   rotate(angle*TWO_PI/360);
