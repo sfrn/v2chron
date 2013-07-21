@@ -43,6 +43,8 @@
 import processing.video.*;
 import processing.serial.*;
 
+
+
 Capture cam1;
 
 //Take what we know about the packets for starting the access point
@@ -60,6 +62,9 @@ int stopAccessPointNum[] = {
   255, 7, 3, 255, 9, 3
 };
 
+LiveSound live;
+BassMachine bassMachine;
+
 boolean justStarted = false;
 //Convert it all to bytes so that watch will understand
 //what we're talking about..
@@ -74,6 +79,9 @@ void setup() {
   println(Capture.list());
   cam1 = new Capture(this, 320, 240, 15);
   cam1.start();
+  
+  live = new LiveSound();
+  bassMachine = new BassMachine();
 
   System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
   println(Serial.list());
@@ -87,6 +95,8 @@ void setup() {
   //Send data request to chronos.
   chronos.write(accDataRequest);
   justStarted = true;
+  
+  colorMode(HSB);
 } 
 
 float angle = 0;
@@ -120,6 +130,8 @@ int signum(float f) {
 } 
 
 void draw() {
+  live.step();
+  
   if (chronos.available() >= 0) {
     //Accelerometer data is 7 bytes long. This looks really lame, but it works.
     byte[] buf = new byte[7];  
@@ -153,16 +165,8 @@ void draw() {
 
       //angleSlope += map(x, -128, 127, -4.0, 4.0);
       float newAngle = map(vec.x, -128, 127, -180, 180);
-      /*while(abs(newAngle - angle) > 60 && newAngle > 0.5) {
-        newAngle *= 0.8;
-      }
-      if(abs(newAngle - angle) < 5) {
-        newAngle = angle;
-      }*/
-      
       threshold = 1.0 * (vec.x + 128) / 256;
-      //angle = newAngle;
-      println("x" + vec.x + " y" + vec.y + " z"+vec.z);
+//      println("x" + vec.x + " y" + vec.y + " z"+vec.z);
     } else if((buf[3] & 0xf0) != 0) {
       // button press! todo: distinguish press/release
       String button = "";
@@ -185,12 +189,16 @@ void draw() {
     cam1.read();
   }
   PImage im = cam1.get();
+  
   im.resize(1024, 768);
   im.filter(THRESHOLD, threshold);
   translate(width/2, height/2);
   //println("my angle is " + angle);
   rotate(angle*TWO_PI/360);
   translate(-width/2, -height/2);
+  
+  tint(bassMachine.getColor());
+  
   image(im, 0, 0);
 }
 
