@@ -92,8 +92,8 @@ void setup() {
 float angle = 0;
 float angleSlope = 0;
 
-PVector offset = new PVector(-26, 0, 0);
-
+PVector offset = new PVector(0, 0, 0);
+PVector lastReal = null;
 float oldX=0, oldY=0, oldZ=0;
 
 void unjitter(PVector vec) {
@@ -110,6 +110,8 @@ void unjitter(PVector vec) {
    vec.z = 9*vec.z + 0.5 * oldZ;
    oldZ = vec.z;*/
 }
+
+float threshold = 0.8;
 
 int signum(float f) {
   if (f > 0) return 1;
@@ -137,34 +139,44 @@ void draw() {
       justStarted = false;
       byte[] dummyBuffer = new byte[3];
       chronos.readBytes(dummyBuffer);
-      println(dummyBuffer);
     }
 
     for (int i = 0; i < 7; i++) {
       buf[i] = (byte)chronos.read();
     }
-
-
+    
     if (buf[3] == 1) {
       PVector vec = new PVector(buf[4], buf[5], buf[6]);
+      lastReal = vec.get();
       vec.add(offset);
        //unjitter(vec);
 
       //angleSlope += map(x, -128, 127, -4.0, 4.0);
-      float newAngle = map(vec.x, -128, 127, 0, 360);
-      while(abs(newAngle - angle) > 60 && newAngle > 0.5) {
+      float newAngle = map(vec.x, -128, 127, -180, 180);
+      /*while(abs(newAngle - angle) > 60 && newAngle > 0.5) {
         newAngle *= 0.8;
       }
       if(abs(newAngle - angle) < 5) {
         newAngle = angle;
-      }
-      angle = newAngle;      
-      //draw y line
-      byte y = buf[5];
-
-      //draw z line
-      byte z = buf[6];
+      }*/
+      
+      threshold = 1.0 * (vec.x + 128) / 256;
+      //angle = newAngle;
       println("x" + vec.x + " y" + vec.y + " z"+vec.z);
+    } else if((buf[3] & 0xf0) != 0) {
+      // button press! todo: distinguish press/release
+      String button = "";
+      switch(buf[3] & 0xf0) {
+        case 0x10: button = "*"; break;
+        case 0x20: button = "#"; break;
+        case 0x30: button = "up"; break;
+        default: button = "?";
+      }
+      if(button.equals("#") && lastReal != null) {
+        // # button: set offset
+        offset = lastReal.get();
+        offset.mult(-1);
+      }
     }
     chronos.write(accDataRequest);
   }
@@ -174,9 +186,9 @@ void draw() {
   }
   PImage im = cam1.get();
   im.resize(1024, 768);
-  im.filter(THRESHOLD, 0.8);
+  im.filter(THRESHOLD, threshold);
   translate(width/2, height/2);
-  println("my angle is " + angle);
+  //println("my angle is " + angle);
   rotate(angle*TWO_PI/360);
   translate(-width/2, -height/2);
   image(im, 0, 0);
