@@ -44,6 +44,7 @@ import processing.video.*;
 import processing.serial.*;
 
 PImage headImage;
+PImage cdImage;
 
 Capture cam1;
 
@@ -66,6 +67,9 @@ LiveSound live;
 BassMachine bassMachine;
 
 boolean justStarted = false;
+
+boolean doRotate = false, doTint = true;
+
 //Convert it all to bytes so that watch will understand
 //what we're talking about..
 byte startAccessPoint[] = byte(startAccessPointNum);
@@ -80,15 +84,15 @@ void setup() {
   cam1 = new Capture(this, 320, 240, 15);
   cam1.start();
   
-  println("live?");
   live = new LiveSound();
-  println("live ok");
   bassMachine = new BassMachine();
-  println("bass ok");
   
   headImage = loadImage("./Plane_Kopf600.png");
   headImage.resize(width, height);
-
+  
+  cdImage = loadImage("./cd.png");
+  cdImage.resize(width, height);
+  
   System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
   println(Serial.list());
   chronos = new Serial(this, "/dev/ttyACM0", 115200);
@@ -110,6 +114,11 @@ float angleSlope = 0;
 PVector offset = new PVector(0, 0, 0);
 PVector lastReal = null;
 float oldX=0, oldY=0, oldZ=0;
+
+void blendBlue(PImage target) {
+  /*target.blend(cdImage, 0, 0, width, height, 0, 0, width, height, MULTIPLY);
+  target.filter(BLUR, 6);*/
+}
 
 void unjitter(PVector vec) {
   /*float tmp;
@@ -169,7 +178,9 @@ void draw() {
        //unjitter(vec);
 
       //angleSlope += map(x, -128, 127, -4.0, 4.0);
-      float newAngle = map(vec.x, -128, 127, -180, 180);
+      if(doRotate) {
+        angle = map(vec.x, -128, 127, -180, 180);
+      }
       threshold = 1.0 * (vec.x + 128) / 256;
 //      println("x" + vec.x + " y" + vec.y + " z"+vec.z);
     } else if((buf[3] & 0xf0) != 0) {
@@ -185,6 +196,7 @@ void draw() {
         // # button: set offset
         offset = lastReal.get();
         offset.mult(-1);
+        println("calibrated to " + offset);
       }
     }
     chronos.write(accDataRequest);
@@ -200,15 +212,28 @@ void draw() {
   if(live.fft.calcAvg(0, 100) > 20) {
     im.blend(headImage, 0, 0, width, height,  0, 0, width, height, LIGHTEST);
   }
-  
-  translate(width/2, height/2);
-  //println("my angle is " + angle);
-  rotate(angle*TWO_PI/360);
-  translate(-width/2, -height/2);
-  
-  tint(bassMachine.getColor());
+//  blendBlue(im);
+  if(doRotate) {
+    translate(width/2, height/2);
+    //println("my angle is " + angle);
+    rotate(angle*TWO_PI/360);
+    translate(-width/2, -height/2);
+  } 
+  if(doTint) {
+    tint(bassMachine.getColor());
+  }
   
   image(im, 0, 0);
+}
+
+void keyPressed() {
+  if(key == 'r') {
+    doRotate = !doRotate;
+    if(!doRotate) angle = 0;
+  } else if(key == 't') {
+    doTint = !doTint;
+    if(!doTint) tint(255);
+  }
 }
 
 void exit() {
