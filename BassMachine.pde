@@ -14,7 +14,7 @@ class BassMachine {
   }
   
   color getColor() {
-    float avg = live.fft.calcAvg(0, 100); 
+    float avg = liveSound.fft.calcAvg(0, 100); 
     drawFreqBackground(avg);
     return color(h, map(avgValue, 0, 100, 0, 255), map(avgValue, 0, 100, 255, 0));
     //return color(0, 0, 255);
