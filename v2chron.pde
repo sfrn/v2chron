@@ -1,26 +1,22 @@
-import processing.video.*;
 
 PImage headImage;
 PImage cdImage;
 
-Capture cam1;
 ArrayList<Song> songs;
 Song song;
 LiveSound liveSound;
 BassMachine bassMachine;
 Chronos chronos;
+Camera camera;
 
 PApplet applet;
 
 void setup() {
   size(1024, 768);
-  println(Capture.list());
+  
   applet = this;
 
-  
-  cam1 = new Capture(this, 320, 240, 15);
-  cam1.start();
-  
+  camera = new Camera();  
   liveSound = new LiveSound();
   bassMachine = new BassMachine();
   chronos = new Chronos();
@@ -33,8 +29,10 @@ void setup() {
   
   songs = new ArrayList<Song>();
   songs.add(new Times());
+  songs.add(new Parents());
   
   song = songs.get(0);
+  song.on();
   
   colorMode(HSB);
 } 
@@ -51,7 +49,9 @@ void keyPressed() {
     if(songs.size() <= i) {
       println("Song "+i+" does not exist");
     } else {
+      song.off();
       song = songs.get(i);
+      song.on();
       println("Chose song "+i+" ("+song.getName()+")");
     }
   }
