@@ -5,6 +5,10 @@ class Times extends Song {
   
   }
   
+  String getName() {
+    return "Times";
+  }
+  
   void chronosData(PVector vec) {
     threshold = (vec.x + 128) / 256.;
   }
