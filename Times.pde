@@ -1,8 +1,9 @@
 class Times extends Song {
   float threshold = 0.8;
+  Smoothie smoothie;
   
   Times() {
-  
+    
   }
   
   String getName() {
@@ -11,6 +12,7 @@ class Times extends Song {
   
   void on() {
     camera.start();
+    smoothie = new Smoothie(5);
   }
   
   void off() {
@@ -18,7 +20,8 @@ class Times extends Song {
   }
   
   void chronosData(PVector vec) {
-    threshold = (vec.x + 128) / 256.;
+    threshold = (smoothie.get(vec.x) + 128) / 256.;
+    //threshold = (vec.x + 128) / 256.;
   }
   
   void draw() {

@@ -1,15 +1,18 @@
+/*
+  heavily based on:
+  
+  "Experimental Drops" by Roberto Cezar Bianchini, licensed under Creative Commons Attribution-Share Alike 3.0 and GNU GPL license.
+  Work: http://openprocessing.org/visuals/?visualID= 103927  
+  License: 
+  http://creativecommons.org/licenses/by-sa/3.0/
+  http://creativecommons.org/licenses/GPL/2.0/
+*/
+
 class Parents extends Song {
-  int             MAX_NUMBER_OF_DROPS  = 300;
-  int             MIN_RADIUS           = 2;
-  int             MAX_RADIUS           = 30;
-  int             MIN_SPEED            = 1;
-  int             MAX_SPEED            = 3;
-  int             MIN_ALPHA_SPEED      = 2;
-  int             MAX_ALPHA_SPEED      = 5;
-  int             MAX_NUMBER_OF_SHAPES = 3;
-  boolean         foamMode;     // True is Foam Drawing Mode; False is Click Drawing Mode
-  int             currentShape; // CIRCLE = 0, RECTANGLE = 1, TRIANGLE = 2, STAR = 3           
+  int             MAX_NUMBER_OF_DROPS  = 50;
   ArrayList<Drop> drops;
+  
+  Smoothie smoothie;
   
   String getName() {
     return "Parents";
@@ -17,8 +20,7 @@ class Parents extends Song {
    
   Parents() {
     drops        = new ArrayList<Drop>();
-    foamMode     = true;
-    currentShape = 0;
+    smoothie = new Smoothie(10);
     background(0);
   }
   
@@ -40,8 +42,19 @@ class Parents extends Song {
       if (drops.get(i).finished())
         drops.remove(i);
         
-    if(random(50) > 45) {
-      drops.add(new Drop(currentShape, random(2, 21), mouseX, mouseY, random(1, 3), random(2, 5)));
+  }
+
+  PVector lastMin = null, lastMax = null;
+  float lastMinMS = 0;
+  
+  float maxR=0;
+  
+  void chronosData(PVector vec) {
+    float mag = vec.mag();
+    mag = smoothie.get(mag);
+    maxR = max(maxR, mag);
+    if(random(maxR*maxR) < mag*mag && drops.size() < MAX_NUMBER_OF_DROPS) {
+      drops.add(new Drop(int(random(6)), random(2, 21), int(random(width)), int(random(height)), random(1, 2), random(2, 3)));
     }
   }
 }
@@ -123,10 +136,22 @@ class Drop {
         triangle(px + radius * cos30, py + radius * 0.5F,
                  px, py - radius * 0.5F,
                  px - radius * cos30, py + radius * 0.5F);
-      break;
- 
-      default: println("BUG IN CLASS Drop: Drop Mode should never be reach default case"); break;
+        break;
+      default:
+         int sides = shape + 2; 
+         beginShape();
+         float fx = 0, fy = 0;
+         for(int i = 0; i<sides ; i++) {
+           if(i == 0) {
+             fx = px + sin(TWO_PI/sides*i) * radius;
+             fy = py + cos(TWO_PI/sides*i) * radius;
+           }
+           vertex(px + sin(TWO_PI/sides*i) * radius, py + cos(TWO_PI/sides*i) * radius);
+         }
+         vertex(fx, fy);
+         endShape();
     }
   }
+
 }
 

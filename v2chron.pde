@@ -30,6 +30,7 @@ void setup() {
   songs = new ArrayList<Song>();
   songs.add(new Times());
   songs.add(new Parents());
+  songs.add(new Tree());
   
   song = songs.get(0);
   song.on();
