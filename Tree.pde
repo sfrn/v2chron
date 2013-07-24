@@ -11,6 +11,7 @@ class Tree extends Song {
   
   color back = color(255, 255, 255);
   float nextDec = 0;
+  float lastBack = 0;
   
   Smoothie smoothie;
   
@@ -61,10 +62,15 @@ class Tree extends Song {
     strokeWeight(3);
     background(back);
   
-    if(liveSound.fft.calcAvg(0, 100) > 10 && currentLevels < levelsMax) {
-      back = color(random(255), random(255), random(255), random(128));
-      currentLevels++;
-      nextDec = millis() + random(500, 1000);
+    if(liveSound.fft.calcAvg(0, 100) > 10) {
+      if(millis() >= lastBack + 300) {
+        back = color(random(255), random(255), random(255), random(128));
+        lastBack = millis();
+      }
+      if(currentLevels < levelsMax) {
+        currentLevels++;
+        nextDec = millis() + random(500, 1000);
+      }      
     }
     
     if(millis() >= nextDec && currentLevels > 0) {

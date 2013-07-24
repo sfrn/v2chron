@@ -1,4 +1,3 @@
-
 PImage headImage;
 PImage cdImage;
 
@@ -46,7 +45,7 @@ void draw() {
 
 void keyPressed() {
   if(key >= '0' && key <= '9') {
-    int i = key - '0';
+    int i = key - '1';
     if(songs.size() <= i) {
       println("Song "+i+" does not exist");
     } else {
