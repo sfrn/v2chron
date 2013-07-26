@@ -8,13 +8,13 @@ class LiveSound {
 
   LiveSound () {
     minim = new Minim(this);
-    in = minim.getLineIn();
+   /* in = minim.getLineIn();
     
     fft = new FFT(in.bufferSize(), in.sampleRate());
-    fft.logAverages(60, 2);
+    fft.logAverages(60, 2);*/
   }
   
   void step() {
-    fft.forward(in.mix);
+    //fft.forward(in.mix);
   }
 }

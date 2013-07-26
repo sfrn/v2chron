@@ -1,3 +1,5 @@
+import java.util.HashSet;
+
 class Tree extends Song {
   int levelsMax = 8;
   float initialLength = 160;
@@ -26,6 +28,7 @@ class Tree extends Song {
   
   Tree() {
     smoothie = new Smoothie(10);
+    notes = new HashSet<Integer>();
   }
   
   void chronosData(PVector vec) {
@@ -57,22 +60,57 @@ class Tree extends Song {
     }
   }
   
-  public void draw() {
-    stroke(pointColor);
-    strokeWeight(3);
-    background(back);
+  int MIN_PITCH = 0;
+  int MAX_PITCH = 46;
+  int MIN_VELOCITY = 64;
+  int MIN_CHANGE = 400;
   
-    if(liveSound.fft.calcAvg(0, 100) > 10) {
-      if(millis() >= lastBack + 300) {
+  HashSet<Integer> notes;
+  
+  void noteOn(int channel, int pitch, int velocity) {
+    if(pitch >= MIN_PITCH && pitch <= MAX_PITCH && velocity > MIN_VELOCITY) {
+      if(millis() >= lastBack + MIN_CHANGE) {
         back = color(random(255), random(255), random(255), random(128));
         lastBack = millis();
       }
       if(currentLevels < levelsMax) {
         currentLevels++;
         nextDec = millis() + random(500, 1000);
-      }      
+      } 
     }
+    notes.add(pitch);
+    if(isAMajor()) println("EYYUP");
+  }
+  
+  void noteOff(int channel, int pitch, int velocity) {
+    notes.remove(pitch);
+  }
+  
+  boolean isAMajor() {
+    boolean a=false, cis=false, e=false;
+    for(Integer note : notes) {
+      switch(note % 12) {
+        case 9: // A
+          a = true;
+          break;
+        case 1: // C#
+          cis = true;
+          break; 
+        case 4: // E
+          e = true;
+          break;
+        default:
+          return false;
+      }
+    }
+    return a && cis && e;
+  }
     
+  public void draw() {
+    stroke(pointColor);
+    strokeWeight(3);
+    background(back);
+  
     if(millis() >= nextDec && currentLevels > 0) {
       nextDec = millis() + random(500, 1000);
       currentLevels--;

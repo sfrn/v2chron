@@ -33,9 +33,9 @@ class Times extends Song {
     im.resize(width, height);
     im.filter(THRESHOLD, threshold);
     tint(bassMachine.getColor());
-    if(liveSound.fft.calcAvg(0, 100) > 20) {
+    /*if(liveSound.fft.calcAvg(0, 100) > 20) {
       im.blend(headImage, 0, 0, width, height,  0, 0, width, height, LIGHTEST);
-    }
+    }*/
     image(im, 0, 0);
   }
 }

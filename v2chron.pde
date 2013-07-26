@@ -7,6 +7,7 @@ LiveSound liveSound;
 BassMachine bassMachine;
 Chronos chronos;
 Camera camera;
+Midi midi;
 
 PApplet applet;
 
@@ -19,6 +20,7 @@ void setup() {
   liveSound = new LiveSound();
   bassMachine = new BassMachine();
   chronos = new Chronos();
+  midi = new Midi();
   
   headImage = loadImage("./Plane_Kopf600.png");
   headImage.resize(width, height);

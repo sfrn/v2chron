@@ -7,4 +7,8 @@ abstract class Song {
   
   void chronosData(PVector vec) {
   }
+  
+  void noteOn(int channel, int pitch, int velocity) {};
+  void noteOff(int channel, int pitch, int velocity) {};
+  void controllerChange(int channel, int number, int value) {};
 }
