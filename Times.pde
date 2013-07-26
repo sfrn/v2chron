@@ -1,6 +1,10 @@
 class Times extends Song {
   float threshold = 0.8;
   Smoothie smoothie;
+  NoteRecorder recorder;
+  
+  float factor = 1.0;
+  boolean hadAMajor = false;
   
   Times() {
     
@@ -12,7 +16,9 @@ class Times extends Song {
   
   void on() {
     camera.start();
-    smoothie = new Smoothie(3);
+    smoothie = new Smoothie(0.15);
+    recorder = new NoteRecorder();
+    factor = 1.0;
   }
   
   void off() {
@@ -20,9 +26,42 @@ class Times extends Song {
   }
   
   void chronosData(PVector vec) {
-  //  threshold = (smoothie.get(vec.x) + 128) / 256.;
-    threshold = (vec.x + 128) / 256.;
+    threshold = map((smoothie.get(vec.x) + 128) / 256., 0, 1, .1, 1) * factor;
+    //threshold = map((vec.x + 128) / 256., 0, 1, .1, 1);
   }
+  
+  void noteOn(int channel, int pitch, int velocity) {
+    recorder.on(pitch, velocity);
+  }
+  
+  void noteOff(int channel, int pitch, int velocity) {
+    recorder.off(pitch);
+  }
+  
+  final float BASS_THRESHOLD = 0.7;
+  color col;
+      
+  boolean isAMajor() {
+    boolean a=false, cis=false, e=false;
+    for(Integer note : recorder.notes.keySet()) { // TODO: optimization?
+      switch(note % 12) {
+        case 9: // A
+          a = true;
+          break;
+        case 1: // C#
+          cis = true;
+          break; 
+        case 4: // E
+          e = true;
+          break;
+        default:
+          return false;
+      }
+    }
+    return a && cis && e;
+  }
+  
+  float lastBassNotes = MAX_INT;
   
   void draw() {
     if (camera.cam1.available()) {
@@ -32,10 +71,34 @@ class Times extends Song {
     
     im.resize(width, height);
     im.filter(THRESHOLD, threshold);
-    tint(bassMachine.getColor());
-    /*if(liveSound.fft.calcAvg(0, 100) > 20) {
+    
+    // ending detector
+    if(isAMajor()) {
+      //factor *= 0.99;
+      if(!hadAMajor) println("A detected ...");
+      factor *= 1.01;
+      hadAMajor = true;
+    } else if(hadAMajor) {
+      factor /= 1.01;
+      if(abs(factor - 1) < 0.01) {
+        factor = 1.0;
+        hadAMajor = false;
+        println("Back to reality.");
+      } 
+    }
+        
+    float val = 0;
+    if(recorder.bassNotes > 0) {
+      val = map(recorder.bassNotes * recorder.averageVelocity, 0, recorder.bassNotes * 127, 0, 1);
+      if(recorder.bassNotes < lastBassNotes) {
+        val = 0;
+        lastBassNotes = recorder.bassNotes;
+      } 
+    }
+    tint(bassMachine.getColor(val));
+    if(val >= BASS_THRESHOLD) {
       im.blend(headImage, 0, 0, width, height,  0, 0, width, height, LIGHTEST);
-    }*/
+    }
     image(im, 0, 0);
   }
 }

@@ -1,23 +1,16 @@
-/* smoothens your data */
+/* smoothens your data.
+   code from http://blog.thomnichols.org/2011/08/smoothing-sensor-data-with-a-low-pass-filter */
 class Smoothie {
-  ArrayList<Float> data;
-  int n;
+  float oldData;
+  float alpha;
   
-  Smoothie(int n) {
-    data = new ArrayList<Float>(n);
-    this.n = n;
+  Smoothie(float alpha) {
+    this.alpha = alpha;
+    this.oldData = 0;
   }
   
   float get(float newData) {
-    if(data.size() >= n) {
-      //full array yes
-      data.remove(0);
-    } 
-    data.add(newData);
-    float sum = 0;
-    for(Float f : data) {
-      sum += f;
-    }
-    return sum / data.size();
+    if(oldData == 0) return newData;
+    else return oldData + alpha * (newData - oldData); 
   }
 }

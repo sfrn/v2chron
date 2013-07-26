@@ -11,8 +11,6 @@
 class Childrens extends Song {
   int             MAX_NUMBER_OF_DROPS  = 50;
   ArrayList<Drop> drops;
-  
-  Smoothie smoothie;
   NoteRecorder recorder;
   
   int state;
@@ -29,7 +27,6 @@ class Childrens extends Song {
    
   Childrens() {
     drops        = new ArrayList<Drop>();
-    smoothie = new Smoothie(10);
     background(0);
   }
   
@@ -68,7 +65,7 @@ class Childrens extends Song {
       println("state changed to normal");
       state = S_NORMAL;
     } else {
-      recorder.on(pitch, velocity);
+      //recorder.on(pitch, velocity);
       if(drops.size() < MAX_NUMBER_OF_DROPS) {
         /*
         Pitches: C4 = 60
@@ -87,7 +84,7 @@ class Childrens extends Song {
   }
   
   void noteOff(int channel, int pitch, int velocity) {
-    recorder.off(pitch);
+   // recorder.off(pitch);
   }
   
   void keyPressed(char key) {

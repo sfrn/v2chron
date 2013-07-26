@@ -79,31 +79,10 @@ class Tree extends Song {
       } 
     }
     notes.add(pitch);
-    if(isAMajor()) println("EYYUP");
   }
   
   void noteOff(int channel, int pitch, int velocity) {
     notes.remove((Integer)pitch);
-  }
-  
-  boolean isAMajor() {
-    boolean a=false, cis=false, e=false;
-    for(Integer note : notes) {
-      switch(note % 12) {
-        case 9: // A
-          a = true;
-          break;
-        case 1: // C#
-          cis = true;
-          break; 
-        case 4: // E
-          e = true;
-          break;
-        default:
-          return false;
-      }
-    }
-    return a && cis && e;
   }
     
   public void draw() {
