@@ -8,18 +8,26 @@
   http://creativecommons.org/licenses/GPL/2.0/
 */
 
-class Parents extends Song {
+class Childrens extends Song {
   int             MAX_NUMBER_OF_DROPS  = 50;
   ArrayList<Drop> drops;
   
   Smoothie smoothie;
   NoteRecorder recorder;
   
+  int state;
+  final int S_NORMAL = 1;
+  final int S_DROP = 2;
+  
+  final float DEFAULT_BG = 0.1;
+  final float BG_MULT = 1.1;
+  float bg;
+  
   String getName() {
-    return "Parents";
+    return "Childrens";
   }
    
-  Parents() {
+  Childrens() {
     drops        = new ArrayList<Drop>();
     smoothie = new Smoothie(10);
     background(0);
@@ -27,23 +35,24 @@ class Parents extends Song {
   
   void on() {
     recorder = new NoteRecorder();
+    state = S_NORMAL;
   }
   
   void off() {
   }
   
   void draw() {
-    background(0);
-    
-    if(random(MAX_NOTES) <= recorder.size() && drops.size() < MAX_NUMBER_OF_DROPS) {
-      println("pitch " +recorder.averagePitch + " velo " + 2recorder.averageVelocity);
-      /*
-      Pitch: C4 = 60
-      */
-      int radius = random(
-      drops.add(new Drop(int(random(6)), random(2, 21), int(random(width)), int(random(height)), random(1, 2), random(2, 3)));
+    switch(state) {
+      case S_NORMAL:
+        background(0);
+        break;
+        
+      case S_DROP:
+        bg *= BG_MULT;
+        background(bg);
+        break;
     }
-   
+    
     for (int i = 0; i < drops.size(); i++) {
       drops.get(i).update();
       drops.get(i).render();
@@ -54,29 +63,40 @@ class Parents extends Song {
         drops.remove(i);
   }
   
-  int MAX_NOTES = 15;
-  
   void noteOn(int channel, int pitch, int velocity) {
-    recorder.on(pitch, velocity);
+    if(state == S_DROP) {
+      println("state changed to normal");
+      state = S_NORMAL;
+    } else {
+      recorder.on(pitch, velocity);
+      if(drops.size() < MAX_NUMBER_OF_DROPS) {
+        /*
+        Pitches: C4 = 60
+                 C2 = 36
+                 C6 = 84
+        */
+        // the deeper, the slower
+        float radiusSpeed = map(pitch, 36, 84, 0.5, 2.5);
+        float alphaSpeed = map(pitch, 36, 84, 1.5, 3.5);
+        // the louder, the bigger
+        float radius = map(velocity, 0, 100, 2, 30);
+        println("pitch " + pitch + " velo " + velocity + " ==> radius speed " + radiusSpeed + " radius "+ radius); 
+        drops.add(new Drop(int(random(6)), radius, int(random(width)), int(random(height)), radiusSpeed, alphaSpeed));
+      }
+    }
   }
   
   void noteOff(int channel, int pitch, int velocity) {
     recorder.off(pitch);
   }
-
-  PVector lastMin = null, lastMax = null;
-  float lastMinMS = 0;
   
-  float maxR=0;
-  
- /* void chronosData(PVector vec) {
-    float mag = vec.mag();
-    mag = smoothie.get(mag);
-    maxR = max(maxR, mag);
-    if(random(maxR*maxR) < mag*mag && drops.size() < MAX_NUMBER_OF_DROPS) {
-      drops.add(new Drop(int(random(6)), random(2, 21), int(random(width)), int(random(height)), random(1, 2), random(2, 3)));
+  void keyPressed(char key) {
+    if(key == ' ' && state == S_NORMAL) {
+      println("state change to drop");
+      state = S_DROP;
+      bg = DEFAULT_BG;
     }
-  }*/
+  }
 }
  
  

@@ -9,10 +9,13 @@ Chronos chronos;
 Camera camera;
 Midi midi;
 
+float FPS = 40;
+
 PApplet applet;
 
 void setup() {
   size(1024, 768);
+  frameRate(FPS);
   
   applet = this;
 
@@ -30,7 +33,7 @@ void setup() {
   
   songs = new ArrayList<Song>();
   songs.add(new Times());
-  songs.add(new Parents());
+  songs.add(new Childrens());
   songs.add(new Tree());
   
   song = songs.get(0);
@@ -45,17 +48,23 @@ void draw() {
   song.draw();
 }
 
+void chooseSong(int i) {
+  if(songs.size() <= i) {
+    println("Song "+i+" does not exist");
+  } else {
+    song.off();
+    song = songs.get(i);
+    song.on();
+    println("Chose song "+i+" ("+song.getName()+")");
+  }
+}
+
 void keyPressed() {
   if(key >= '0' && key <= '9') {
     int i = key - '1';
-    if(songs.size() <= i) {
-      println("Song "+i+" does not exist");
-    } else {
-      song.off();
-      song = songs.get(i);
-      song.on();
-      println("Chose song "+i+" ("+song.getName()+")");
-    }
+    chooseSong(i);
+  } else {
+    song.keyPressed(key);
   }
 }
 
