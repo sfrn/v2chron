@@ -83,7 +83,7 @@ class Tree extends Song {
   }
   
   void noteOff(int channel, int pitch, int velocity) {
-    notes.remove(pitch);
+    notes.remove((Integer)pitch);
   }
   
   boolean isAMajor() {

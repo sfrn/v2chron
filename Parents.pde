@@ -13,6 +13,7 @@ class Parents extends Song {
   ArrayList<Drop> drops;
   
   Smoothie smoothie;
+  NoteRecorder recorder;
   
   String getName() {
     return "Parents";
@@ -25,6 +26,7 @@ class Parents extends Song {
   }
   
   void on() {
+    recorder = new NoteRecorder();
   }
   
   void off() {
@@ -32,6 +34,15 @@ class Parents extends Song {
   
   void draw() {
     background(0);
+    
+    if(random(MAX_NOTES) <= recorder.size() && drops.size() < MAX_NUMBER_OF_DROPS) {
+      println("pitch " +recorder.averagePitch + " velo " + 2recorder.averageVelocity);
+      /*
+      Pitch: C4 = 60
+      */
+      int radius = random(
+      drops.add(new Drop(int(random(6)), random(2, 21), int(random(width)), int(random(height)), random(1, 2), random(2, 3)));
+    }
    
     for (int i = 0; i < drops.size(); i++) {
       drops.get(i).update();
@@ -41,7 +52,16 @@ class Parents extends Song {
     for (int i = 0; i < drops.size(); i++)
       if (drops.get(i).finished())
         drops.remove(i);
-        
+  }
+  
+  int MAX_NOTES = 15;
+  
+  void noteOn(int channel, int pitch, int velocity) {
+    recorder.on(pitch, velocity);
+  }
+  
+  void noteOff(int channel, int pitch, int velocity) {
+    recorder.off(pitch);
   }
 
   PVector lastMin = null, lastMax = null;
@@ -49,14 +69,14 @@ class Parents extends Song {
   
   float maxR=0;
   
-  void chronosData(PVector vec) {
+ /* void chronosData(PVector vec) {
     float mag = vec.mag();
     mag = smoothie.get(mag);
     maxR = max(maxR, mag);
     if(random(maxR*maxR) < mag*mag && drops.size() < MAX_NUMBER_OF_DROPS) {
       drops.add(new Drop(int(random(6)), random(2, 21), int(random(width)), int(random(height)), random(1, 2), random(2, 3)));
     }
-  }
+  }*/
 }
  
  
