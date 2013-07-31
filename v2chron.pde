@@ -32,17 +32,24 @@ void setup() {
   cdImage.resize(width, height);
   
   songs = new ArrayList<Song>();
-  songs.add(new Times());
-  songs.add(new Childrens());
-  songs.add(new Tree());
   songs.add(new Nix());
+  songs.add(new Childrens());
+  songs.add(new Times());
+  songs.add(new Tree());
+  songs.add(new Parents());
   
+  printSongs();
   song = songs.get(0);
   song.on();
   
   colorMode(HSB);
-} 
+}
 
+void printSongs() {
+  for(int i = 0; i < songs.size(); i++) {
+    println("{" + (i+1) + "} " + songs.get(i).getName());
+  }
+}
 void draw() {
   liveSound.step();
   chronos.step();
