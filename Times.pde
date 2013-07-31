@@ -63,6 +63,8 @@ class Times extends Song {
   
   float lastBassNotes = MAX_INT;
   
+  float INCREASE = 0.02;
+  
   void draw() {
     if (camera.cam1.available()) {
       camera.cam1.read();
@@ -76,10 +78,10 @@ class Times extends Song {
     if(isAMajor()) {
       //factor *= 0.99;
       if(!hadAMajor) println("A detected ...");
-      factor *= 1.01;
+      factor += INCREASE;
       hadAMajor = true;
     } else if(hadAMajor) {
-      factor /= 1.01;
+      factor -= INCREASE;
       if(abs(factor - 1) < 0.01) {
         factor = 1.0;
         hadAMajor = false;

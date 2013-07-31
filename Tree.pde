@@ -1,8 +1,8 @@
 import java.util.HashSet;
 
 class Tree extends Song {
-  int levelsMax = 8;
-  float initialLength = 160;
+  int levelsMax = 10;
+  float initialLength = 140;
   
   float angleMin = PI/24;
   float angleMax = PI/6;

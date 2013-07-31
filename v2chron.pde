@@ -35,6 +35,7 @@ void setup() {
   songs.add(new Times());
   songs.add(new Childrens());
   songs.add(new Tree());
+  songs.add(new Nix());
   
   song = songs.get(0);
   song.on();
