@@ -1,3 +1,6 @@
+import java.util.Set;
+import java.util.ConcurrentModificationException;
+
 class Times extends Song {
   float threshold = 0.8;
   Smoothie smoothie;
@@ -75,7 +78,13 @@ class Times extends Song {
     im.filter(THRESHOLD, threshold);
     
     // ending detector
-    if(isAMajor()) {
+    boolean isA = false;
+    try {
+      isA = isAMajor();
+    } catch (ConcurrentModificationException e) {
+      println("Ignored ConcurrentModification");
+    }
+    if(isA) {
       //factor *= 0.99;
       if(!hadAMajor) println("A detected ...");
       factor += INCREASE;

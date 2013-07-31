@@ -2,4 +2,9 @@
 sudo chmod -R g+w /var/lock
 sudo chown -R root:lock /var/lock/
 sudo chown -R root:lock /var/lock/*
+sudo setterm -blank 0
+sudo setterm -powerdown 0
+#sudo setterm -powersave off
+xset s off
+xset -dpms
 

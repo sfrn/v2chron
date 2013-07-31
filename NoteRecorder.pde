@@ -1,14 +1,14 @@
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 class NoteRecorder {
-  HashMap<Integer, Integer> notes;
+  ConcurrentHashMap<Integer, Integer> notes;
   float averagePitch, averageVelocity;
   int bassNotes;
   
   final int BASS_THRESHOLD = 48; // < C3
   
   NoteRecorder() {
-    notes = new HashMap<Integer, Integer>();
+    notes = new ConcurrentHashMap<Integer, Integer>();
     bassNotes = 0;
   }
   
