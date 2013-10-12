@@ -14,7 +14,7 @@ float FPS = 40;
 PApplet applet;
 
 void setup() {
-  size(1024, 768);
+  size(1024, 768, P3D);
   frameRate(FPS);
   
   applet = this;
@@ -37,6 +37,7 @@ void setup() {
   songs.add(new Times());
   songs.add(new Tree());
   songs.add(new Parents());
+  songs.add(new FrobilausenExploding());
   
   printSongs();
   song = songs.get(0);
