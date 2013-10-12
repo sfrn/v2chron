@@ -1,5 +1,6 @@
 PImage headImage;
 PImage cdImage;
+PImage duererImage;
 
 ArrayList<Song> songs;
 Song song;
@@ -30,6 +31,10 @@ void setup() {
   
   cdImage = loadImage("./cd.png");
   cdImage.resize(width, height);
+  
+  duererImage = loadImage("./Duerer.png");
+  //duererImage.resize(width, height);
+  //duererImage.filter(GRAY);
   
   songs = new ArrayList<Song>();
   songs.add(new Nix());
