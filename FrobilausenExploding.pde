@@ -4,7 +4,7 @@ class FrobilausenExploding extends Song {
   float newCellSize = 25;
   int columns, rows;   // Number of columns and rows in our system
 
-  float easing = 0.1;
+  Smoothie smoothie;
   float factor = 3;
   float delta = 0.01;
 
@@ -13,6 +13,7 @@ class FrobilausenExploding extends Song {
   FrobilausenExploding() {
     img = duererImage;
     setCellSize(cellsize);
+    smoothie = new Smoothie(0.1);
   }
 
   void setCellSize(int newSize) {
@@ -33,7 +34,7 @@ class FrobilausenExploding extends Song {
 
   void noteOn(int channel, int pitch, int velocity) {
     float newFactor = velocity / 30.;
-    factor += (newFactor - factor) * easing;
+    factor = smoothie.get(newFactor);
 
     newCellSize = int(constrain(velocity / 5., 3, 25));
     //hasBegun = true;
