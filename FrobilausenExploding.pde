@@ -10,18 +10,21 @@ class FrobilausenExploding extends Song {
   float newCellSize = 25;
   int columns, rows;   // Number of columns and rows in our system
 
-  Smoothie smoothie;
+  Smoothie smoothie, csmoothie;
   NoteRecorder recorder;
   float factor = 3;
   float delta = 0.5;
   
   boolean isIntro = true;
+  AntiPuke antiPuke;
 
   FrobilausenExploding() {
     img = duererImage;
     setCellSize(cellsize);
     smoothie = new Smoothie(0.1);
+    csmoothie = new Smoothie(0.15);
     recorder = new NoteRecorder();
+    antiPuke = new AntiPuke(0.03);
   }
 
   void setCellSize(int newSize) {
@@ -52,6 +55,10 @@ class FrobilausenExploding extends Song {
       println("Intro is over, switch to main");
     }
   }
+
+  void chronosData(PVector vec) {
+    delta = map(csmoothie.get(vec.mag()), 30, 128, 0.1, 1);
+  }
   
   boolean isAMajor() {
     boolean a=false, cis=false, e=false;
@@ -81,6 +88,7 @@ class FrobilausenExploding extends Song {
   }
 
   void draw() {    
+    boolean canChangeColors = antiPuke.isSane();
     for ( int i = 0; i < columns; i++) {
       // Begin loop for rows
       for ( int j = 0; j < rows; j++) {
@@ -91,9 +99,12 @@ class FrobilausenExploding extends Song {
         // Calculate a z position as a function of mouseX and pixel brightness
         float z = factor * brightness(img.pixels[loc]) - 20.0;
         // Translate to the location, set fill and stroke, and draw the rect
-        c = color(hue(c) * random(1 - delta, 1 + delta), 
-              saturation(c) * random(1 - delta, 1 + delta),
-              brightness(c) * random(1 - delta, 1 + delta));
+        // All that color-changing is a bit pukey, so wait a sane amount of time.
+        if(canChangeColors) {
+          c = color(hue(c) * random(1 - delta, 1 + delta), 
+                saturation(c) * random(1 - delta, 1 + delta),
+                brightness(c) * random(1 - delta, 1 + delta));
+        }
 
         pushMatrix();
         translate(x + 1, y + 30, z);
