@@ -15,7 +15,10 @@ class FrobilausenExploding extends Song {
   float factor = 3;
   float delta = 0.5;
   
+  float alpha = 255;
+  
   boolean isIntro = true;
+  boolean fadeOut = false;
   AntiPuke antiPuke;
 
   FrobilausenExploding() {
@@ -85,10 +88,15 @@ class FrobilausenExploding extends Song {
   }
 
   void keyPressed(char key) {
+    if(key == ' ') {
+      println("now fading out ...");
+      fadeOut = true;
+    }
   }
 
   void draw() {    
     boolean canChangeColors = antiPuke.isSane();
+    
     for ( int i = 0; i < columns; i++) {
       // Begin loop for rows
       for ( int j = 0; j < rows; j++) {
@@ -117,8 +125,7 @@ class FrobilausenExploding extends Song {
     }
 
     setCellSize(int(newCellSize));
-
-    
+   
     if(isIntro) {
       // as long as we are in the intro, don't get too small
       newCellSize = max(newCellSize * 0.95, 10);
@@ -128,6 +135,12 @@ class FrobilausenExploding extends Song {
       newCellSize *= 0.95;
       // slooowly decrease the delta
       delta *= 0.9999999;
+    }
+    if(fadeOut) {
+      alpha *= 0.95;
+      fill(alpha);
+      rectMode(CORNER);
+      rect(0, 0, width, height);
     }
   }
 }

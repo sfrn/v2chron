@@ -1,4 +1,5 @@
 #!/bin/sh
+killall redshift
 sudo chmod -R g+w /var/lock
 sudo chown -R root:lock /var/lock/
 sudo chown -R root:lock /var/lock/*
