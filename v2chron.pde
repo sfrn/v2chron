@@ -16,6 +16,7 @@ PApplet applet;
 
 void setup() {
   size(1024, 768, P3D);
+
   frameRate(FPS);
   
   applet = this;

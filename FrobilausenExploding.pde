@@ -6,28 +6,23 @@ http://creativecommons.org/licenses/GPL/2.0/
 */
 class FrobilausenExploding extends Song {
   PImage img;       // The source image
-  int cellsize = 25; // Dimensions of each cell in the grid
-  float newCellSize = 25;
+  int cellsize; // Dimensions of each cell in the grid
+  float newCellSize;
   int columns, rows;   // Number of columns and rows in our system
 
   Smoothie smoothie, csmoothie;
   NoteRecorder recorder;
-  float factor = 3;
-  float delta = 0.5;
+  float factor;
+  float delta;
   
-  float alpha = 255;
+  float alpha;
   
-  boolean isIntro = true;
-  boolean fadeOut = false;
+  boolean isIntro;
+  boolean fadeOut;
   AntiPuke antiPuke;
 
   FrobilausenExploding() {
-    img = duererImage;
-    setCellSize(cellsize);
-    smoothie = new Smoothie(0.1);
-    csmoothie = new Smoothie(0.15);
-    recorder = new NoteRecorder();
-    antiPuke = new AntiPuke(0.03);
+
   }
 
   void setCellSize(int newSize) {
@@ -41,6 +36,19 @@ class FrobilausenExploding extends Song {
   }
 
   void on() {
+    img = duererImage;
+    smoothie = new Smoothie(0.1);
+    csmoothie = new Smoothie(0.15);
+    recorder = new NoteRecorder();
+    antiPuke = new AntiPuke(0.03);
+    cellsize = 25;
+    newCellSize = 25;
+    factor = 3;
+    delta = 0.5;
+    alpha = 255;
+    isIntro = true;
+    fadeOut = false;
+    setCellSize(cellsize);
   }
 
   void off() {

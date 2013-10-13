@@ -71,6 +71,8 @@ class Times extends Song {
   void draw() {
     if (camera.cam1.available()) {
       camera.cam1.read();
+      // workaround for https://github.com/processing/processing/issues/1852.html
+      camera.cam1.loadPixels();
     }
     PImage im = camera.cam1.get();
     

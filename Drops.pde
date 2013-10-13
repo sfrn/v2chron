@@ -25,11 +25,12 @@ abstract class DropSong extends Song {
   abstract Drop getDrop(int _shape, float _radius, int _px, int _py, float _radiusSpeed, float alphaSpeed);
    
   DropSong() {
-    drops        = new ArrayList<Drop>();
-    background(0);
+
   }
   
   void on() {
+    drops        = new ArrayList<Drop>();
+    background(0);
     recorder = new NoteRecorder();
     state = S_NORMAL;
   }
