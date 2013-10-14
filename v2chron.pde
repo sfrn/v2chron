@@ -44,6 +44,7 @@ void setup() {
   songs.add(new Tree());
   songs.add(new Parents());
   songs.add(new FrobilausenExploding());
+  songs.add(new Voronoi());
   
   printSongs();
   song = songs.get(0);
