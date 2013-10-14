@@ -29,8 +29,7 @@ class Times extends Song {
   }
   
   void chronosData(PVector vec) {
-    threshold = map((smoothie.get(vec.x) + 128) / 256., 0, 1, .1, 1) * factor;
-    //threshold = map((vec.x + 128) / 256., 0, 1, .1, 1);
+    threshold = smoothie.get(map(vec.mag(), -200, 200, 0, 1) * factor);
   }
   
   void noteOn(int channel, int pitch, int velocity) {
