@@ -71,7 +71,7 @@ class ChildrensDrop extends Drop {
   public void render() {
     colorMode(RGB);
     stroke(red, green, blue, strokeAlpha);
-    strokeWeight(3);
+    strokeWeight(0);
     fill(red, green, blue, fillAlpha);
      
     // I hate magic numbers, but that will have to do for now

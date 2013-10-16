@@ -68,7 +68,7 @@ class FrobilausenExploding extends Song {
   }
 
   void chronosData(PVector vec) {
-    delta = map(csmoothie.get(vec.mag()), 30, 128, 0.1, 1);
+    delta = map(csmoothie.get(vec.mag()), 30, 128, 0.5, 1.8);
   }
   
   boolean isAMajor() {

@@ -33,7 +33,7 @@ void setup() {
   cdImage = loadImage("./cd.png");
   cdImage.resize(width, height);
   
-  duererImage = loadImage("./Duerer.png");
+  duererImage = loadImage("./Duererfrei.png");
   //duererImage.resize(width, height);
   //duererImage.filter(GRAY);
   

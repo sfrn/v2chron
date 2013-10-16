@@ -49,15 +49,18 @@ abstract class DropSong extends Song {
         background(bg);
         break;
     }
-    
-    for (int i = 0; i < drops.size(); i++) {
-      drops.get(i).update();
-      drops.get(i).render();
+    try {
+      for (int i = 0; i < drops.size(); i++) {
+        drops.get(i).update();
+        drops.get(i).render();
+      }
+       
+      for (int i = 0; i < drops.size(); i++)
+        if (drops.get(i).finished())
+          drops.remove(i);
+    } catch (NullPointerException e) {
+      println("Ignored null pointer exception");
     }
-     
-    for (int i = 0; i < drops.size(); i++)
-      if (drops.get(i).finished())
-        drops.remove(i);
   }
   
   void noteOn(int channel, int pitch, int velocity) {
