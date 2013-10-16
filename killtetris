@@ -1,2 +1,2 @@
 #!/bin/sh
-killall xitetris
+killall -9 xitetris
