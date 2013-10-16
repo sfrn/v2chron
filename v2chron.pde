@@ -44,7 +44,7 @@ void setup() {
   songs.add(new Childrens());
   songs.add(new Times());
 //  songs.add(new Tree());
-//  songs.add(new Parents());
+  songs.add(new Parents());
   songs.add(new FrobilausenExploding());
   songs.add(new VideoExploding());
   songs.add(new Voronoi());

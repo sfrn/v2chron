@@ -36,7 +36,11 @@ abstract class DropSong extends Song {
   }
   
   void off() {
+    drops = null;
+    recorder = null;
   }
+  
+  abstract void doDrop();
   
   void draw() {
     switch(state) {
@@ -45,8 +49,7 @@ abstract class DropSong extends Song {
         break;
         
       case S_DROP:
-        bg *= BG_MULT;
-        background(bg);
+        doDrop();
         break;
     }
     try {
