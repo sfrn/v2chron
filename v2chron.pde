@@ -43,9 +43,10 @@ void setup() {
   songs.add(new Nix());
   songs.add(new Childrens());
   songs.add(new Times());
-  songs.add(new Tree());
-  songs.add(new Parents());
+//  songs.add(new Tree());
+//  songs.add(new Parents());
   songs.add(new FrobilausenExploding());
+  songs.add(new VideoExploding());
   songs.add(new Voronoi());
   songs.add(new Tetris());
   
@@ -67,19 +68,19 @@ void movieEvent(Movie m) {
 }
 
 void draw() {
-  liveSound.step();
+//  liveSound.step();
   chronos.step();
   song.draw();
 }
 
 void chooseSong(int i) {
   if(songs.size() <= i) {
-    println("Song "+i+" does not exist");
+    println("Song "+(i+1)+" does not exist");
   } else {
     song.off();
     song = songs.get(i);
     song.on();
-    println("Chose song "+i+" ("+song.getName()+")");
+    println("Chose song "+(i+1)+" ("+song.getName()+")");
   }
 }
 

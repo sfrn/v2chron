@@ -2,13 +2,20 @@ class Videos {
   Movie safran, affen, jesus;
   
   Videos() {
-    safran = new Movie(applet, "safran.mp4");
-    affen = new Movie(applet, "affen.mp4");
-    jesus = new Movie(applet, "jesus.mp4");
+
+    //affen = new Movie(applet, "affen.mp4");
+    //jesus = new Movie(applet, "jesus.mp4");
+  }
+  
+  void loadSafran() {
+    safran = new Movie(applet, "jesus.mp4");
+  }
+  
+  void unloadSafran() {
+    safran = null;
   }
   
   void movieEvent(Movie m) {
     m.read();
-    println("yo");
   }
 }

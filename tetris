@@ -2,5 +2,6 @@
 TETRIS=itetris*/xitetris
 
 itetris*/xitetris&
-sleep 1
+sleep 0.5
+# move window
 xdotool search --classname "XITETRIS" windowmove 1792 192
