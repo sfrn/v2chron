@@ -9,6 +9,7 @@ BassMachine bassMachine;
 Chronos chronos;
 Camera camera;
 Midi midi;
+Videos videos;
 
 float FPS = 40;
 
@@ -26,6 +27,7 @@ void setup() {
   bassMachine = new BassMachine();
   chronos = new Chronos();
   midi = new Midi();
+  videos = new Videos();
   
   headImage = loadImage("./Plane_Kopf600.png");
   headImage.resize(width, height);
@@ -58,6 +60,11 @@ void printSongs() {
     println("{" + (i+1) + "} " + songs.get(i).getName());
   }
 }
+
+void movieEvent(Movie m) {
+  videos.movieEvent(m);
+}
+
 void draw() {
   liveSound.step();
   chronos.step();
