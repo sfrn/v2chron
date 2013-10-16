@@ -47,6 +47,7 @@ void setup() {
   songs.add(new Parents());
   songs.add(new FrobilausenExploding());
   songs.add(new Voronoi());
+  songs.add(new Tetris());
   
   printSongs();
   song = songs.get(0);

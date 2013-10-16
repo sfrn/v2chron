@@ -9,5 +9,6 @@ class Videos {
   
   void movieEvent(Movie m) {
     m.read();
+    println("yo");
   }
 }

@@ -1,0 +1,6 @@
+#!/bin/sh
+TETRIS=itetris*/xitetris
+
+itetris*/xitetris&
+sleep 1
+xdotool search --classname "XITETRIS" windowmove 1792 192
