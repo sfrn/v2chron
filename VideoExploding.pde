@@ -8,12 +8,19 @@ class VideoExploding extends Explosion {
     videos.safran.loop();
     super.on();
     isIntro = false;
+    //minFactor = 1;
   }
   
   void off() {
     videos.safran.stop();
     videos.unloadSafran();
     super.off();
+  }
+
+  void setCellSize(int newSize) {
+    cellsize = max(newSize, 3); 
+    columns = img.width / cellsize;  // Calculate # of columns
+    rows = img.height / cellsize;  // Calculate # of rows
   }
   
   void doImage() {
@@ -26,7 +33,7 @@ class VideoExploding extends Explosion {
   }
   
   String getName() {
-    return "Video Exploding";
+    return "Safran Exploding";
   }
 }
 

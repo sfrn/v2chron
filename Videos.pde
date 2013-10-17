@@ -8,11 +8,19 @@ class Videos {
   }
   
   void loadSafran() {
-    safran = new Movie(applet, "jesus.mp4");
+    safran = new Movie(applet, "s2.mp4");
   }
   
   void unloadSafran() {
     safran = null;
+  }
+  
+  void loadJesus() {
+    jesus = new Movie(applet, "j2.mp4");
+  }
+  
+  void unloadJesus() {
+    jesus = null;
   }
   
   void movieEvent(Movie m) {

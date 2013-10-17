@@ -8,7 +8,8 @@ class Particle
   {
     x = random(width);
     y = random(height);
-    c = color(random(64, 228), random(128, 192), random(128, 255));
+    //c = color(random(0, 256), random(200, 256), random(200, 255));
+    c = color(0, 0, 0);
     vel = new PVector(random(-maxSpeed, maxSpeed), random(-maxSpeed, maxSpeed));
   }
   
@@ -80,7 +81,7 @@ class Voronoi extends Song {
   void colorizeDots(int transparency)
   {
     for (int i=0; i<maxDots; i++)
-      dots[i].c = color(random(64, 228), random(128, 192), random(128, 255), transparency);
+      dots[i].c = color(random(0, 256), random(200, 256), random(200, 256), transparency);
   }
 
   void drawRegions()

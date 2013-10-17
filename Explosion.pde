@@ -9,6 +9,7 @@ abstract class Explosion extends Song {
   int cellsize; // Dimensions of each cell in the grid
   float newCellSize;
   int columns, rows;   // Number of columns and rows in our system
+  float minFactor;
 
   Smoothie smoothie, csmoothie;
   NoteRecorder recorder;
@@ -37,9 +38,9 @@ abstract class Explosion extends Song {
   void on() {
     doImage();
     smoothie = new Smoothie(0.1);
-    csmoothie = new Smoothie(0.15);
+    csmoothie = new Smoothie(0.6);
     recorder = new NoteRecorder();
-    antiPuke = new AntiPuke(0.03);
+    antiPuke = new AntiPuke(false);
     cellsize = 25;
     newCellSize = 25;
     factor = 3;
@@ -47,6 +48,7 @@ abstract class Explosion extends Song {
     alpha = 1;
     isIntro = true;
     fadeOut = false;
+    minFactor = 3;
     setCellSize(cellsize);
   }
 
@@ -67,7 +69,7 @@ abstract class Explosion extends Song {
   }
 
   void chronosData(PVector vec) {
-    delta = map(csmoothie.get(vec.mag()), 30, 128, 0.5, 1.8);
+    delta = max(0, map(csmoothie.get(vec.mag()), 30, 120, 0, 2));
   }
   
   boolean isAMajor() {
@@ -117,7 +119,7 @@ abstract class Explosion extends Song {
         // Translate to the location, set fill and stroke, and draw the rect
         // All that color-changing is a bit pukey, so wait a sane amount of time.
         if(canChangeColors) {
-          c = color(hue(c) * random(1 - delta, 1 + delta), 
+          c = color(hue(c) * random(1 - delta*2, 1 + delta*2), 
                 saturation(c) * random(1 - delta, 1 + delta),
                 brightness(c) * random(1 - delta, 1 + delta));
         }
@@ -140,7 +142,7 @@ abstract class Explosion extends Song {
     if(isIntro) {
       // as long as we are in the intro, don't get too small
       newCellSize = max(newCellSize * 0.95, 10);
-      factor = max(factor * 0.95, 3);
+      factor = max(factor * 0.95, minFactor);
     } else {
       factor *= 0.95;
       newCellSize *= 0.95;

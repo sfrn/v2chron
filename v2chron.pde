@@ -1,6 +1,7 @@
 PImage headImage;
 PImage cdImage;
 PImage duererImage;
+PImage qrCode;
 
 ArrayList<Song> songs;
 Song song;
@@ -11,7 +12,7 @@ Camera camera;
 Midi midi;
 Videos videos;
 
-float FPS = 40;
+float FPS = 25;
 
 PApplet applet;
 
@@ -29,6 +30,8 @@ void setup() {
   midi = new Midi();
   videos = new Videos();
   
+  qrCode = loadImage("./qrcode.png");
+  
   headImage = loadImage("./Plane_Kopf600.png");
   headImage.resize(width, height);
   
@@ -41,14 +44,13 @@ void setup() {
   
   songs = new ArrayList<Song>();
   songs.add(new Nix());
-  songs.add(new Childrens());
-  songs.add(new Times());
-//  songs.add(new Tree());
-  songs.add(new Parents());
   songs.add(new FrobilausenExploding());
+  songs.add(new Childrens());
+  songs.add(new Parents());
   songs.add(new VideoExploding());
-  songs.add(new Voronoi());
   songs.add(new Tetris());
+  songs.add(new Jesus());
+  songs.add(new QRCode());
   
   printSongs();
   song = songs.get(0);

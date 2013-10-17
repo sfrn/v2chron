@@ -8,6 +8,10 @@ class AntiPuke {
     waitFrames = int(frameRate * waitSeconds);
   }
   
+  AntiPuke(boolean doit) {
+    if(!doit) waitFrames = 0;
+  }
+  
   boolean isSane() {
     if(framesWaited >= waitFrames) {
       framesWaited = 0; 

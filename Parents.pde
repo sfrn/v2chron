@@ -15,7 +15,7 @@ class Parents extends DropSong {
   }
 
   String getName() {
-    return "Parents";
+    return "Stanislaus";
   }
 
   Drop getDrop(int _shape, float _radius, int _px, int _py, float _radiusSpeed, float alphaSpeed) {
