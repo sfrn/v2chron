@@ -1,5 +1,5 @@
 /* This is heavily based on "Explode" by bettsina walkinson, licensed under Creative Commons Attribution-Share Alike 3.0 and GNU GPL license.
-Work: http://openprocessing.org/visuals/?visualID= 30940  
+Work: http://openprocessing.org/visuals/?visualID=30940  
 License: 
 http://creativecommons.org/licenses/by-sa/3.0/
 http://creativecommons.org/licenses/GPL/2.0/

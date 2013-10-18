@@ -1,3 +1,13 @@
+/*
+  heavily based on:
+  
+  "Experimental Drops" by Roberto Cezar Bianchini, licensed under Creative Commons Attribution-Share Alike 3.0 and GNU GPL license.
+  Work: http://openprocessing.org/visuals/?visualID= 103927  
+  License: 
+  http://creativecommons.org/licenses/by-sa/3.0/
+  http://creativecommons.org/licenses/GPL/2.0/
+*/
+
 class Parents extends DropSong {
   boolean gain;
   int red, green, blue;

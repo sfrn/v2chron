@@ -1,3 +1,11 @@
+/* heavily based on:
+
+"Voronoi Normal or Psychodelic" by Gerd Platl, licensed under Creative Commons Attribution-Share Alike 3.0 and GNU GPL license.
+Work: http://openprocessing.org/visuals/?visualID=21273  
+License: 
+http://creativecommons.org/licenses/by-sa/3.0/
+http://creativecommons.org/licenses/GPL/2.0/
+*/
 class Particle
 {
   float x, y;
