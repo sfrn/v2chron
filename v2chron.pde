@@ -13,6 +13,8 @@ Midi midi;
 Videos videos;
 
 float FPS = 25;
+boolean doFadeout = false;
+float fadeoutFactor = 1.0;
 
 PApplet applet;
 
@@ -69,10 +71,26 @@ void movieEvent(Movie m) {
   videos.movieEvent(m);
 }
 
+void initiateFadeout() {
+  doFadeout = true;
+  fadeoutFactor = 0;
+  println("Initiating fadeout ...");
+}
+
 void draw() {
 //  liveSound.step();
   chronos.step();
   song.draw();
+  if(doFadeout) {
+    fill(0, fadeoutFactor);
+    rectMode(CORNER);
+    rect(0, 0, width, height);
+    fadeoutFactor += 4;
+    if(fadeoutFactor >= 255) {
+      doFadeout = false;
+      chooseSong(0);
+    }
+  }
 }
 
 void chooseSong(int i) {
@@ -93,5 +111,7 @@ void keyPressed() {
   } else {
     song.keyPressed(key);
   }
+  if(key == 'z') initiateFadeout();
 }
+
 
