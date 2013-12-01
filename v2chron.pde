@@ -11,10 +11,13 @@ Chronos chronos;
 Camera camera;
 Midi midi;
 Videos videos;
+OSC osc;
 
 float FPS = 25;
 boolean doFadeout = false;
 float fadeoutFactor = 1.0;
+
+int nextSongToChoose = -1;
 
 PApplet applet;
 
@@ -29,6 +32,7 @@ void setup() {
   liveSound = new LiveSound();
   bassMachine = new BassMachine();
   chronos = new Chronos();
+  osc = new OSC();
   midi = new Midi();
   videos = new Videos();
   
@@ -91,12 +95,18 @@ void draw() {
       chooseSong(0);
     }
   }
+  // very bad thread synchronization code. See OSC.pde.
+  if(nextSongToChoose != -1) {
+    chooseSong(nextSongToChoose);
+    nextSongToChoose = -1;
+  }
 }
 
 void chooseSong(int i) {
   if(songs.size() <= i) {
     println("Song "+(i+1)+" does not exist");
   } else {
+    doFadeout = false;
     song.off();
     song = songs.get(i);
     song.on();
