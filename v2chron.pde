@@ -56,6 +56,7 @@ void setup() {
   songs.add(new VideoExploding());
   songs.add(new Tetris());
   songs.add(new Jesus());
+  songs.add(new Clue());
   songs.add(new QRCode());
   
   printSongs();

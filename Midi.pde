@@ -5,7 +5,7 @@ class Midi {
   
   Midi() {
     MidiBus.list();
-    bus = new MidiBus(applet, "Cable [hw:1,0]", -1);
+    bus = new MidiBus(applet, "Cable [hw:1,0,0]", -1);
   } 
 } 
 

@@ -1,5 +1,5 @@
 class Videos {
-  Movie safran, affen, jesus;
+  Movie safran, affen, jesus, clue;
   
   Videos() {
 
@@ -21,6 +21,14 @@ class Videos {
   
   void unloadJesus() {
     jesus = null;
+  }
+  
+  void loadClue() {
+    clue = new Movie(applet, "TheClue.mp4");
+  }
+  
+  void unloadClue() {
+    clue = null;
   }
   
   void movieEvent(Movie m) {
