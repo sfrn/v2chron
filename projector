@@ -2,4 +2,4 @@
 unclutter -idle 1&
 xrandr --output VGA1 --right-of LVDS1 --mode 1024x768
 cd ~
-sh .fehbg
+xsetroot -bg black

@@ -54,10 +54,10 @@ void setup() {
   songs.add(new Childrens());
   songs.add(new Parents());
   songs.add(new VideoExploding());
-  songs.add(new Tetris());
-  songs.add(new Jesus());
+  //songs.add(new Tetris());
+  //songs.add(new Jesus());
   songs.add(new Clue());
-  songs.add(new QRCode());
+  //songs.add(new QRCode());
   
   printSongs();
   song = songs.get(0);
