@@ -51,6 +51,7 @@ void setup() {
   songs = new ArrayList<Song>();
   songs.add(new Nix());
   songs.add(new CMYK());
+  songs.add(new Times());
   songs.add(new Childrens());
   songs.add(new Parents());
   songs.add(new VideoExploding());

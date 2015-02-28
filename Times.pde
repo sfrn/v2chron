@@ -1,116 +1,85 @@
+/* borrowed from *@*http://www.openprocessing.org/sketch/95861*@* */
 import java.util.Set;
 import java.util.ConcurrentModificationException;
 
 class Times extends Song {
-  float threshold = 0.8;
-  Smoothie smoothie;
-  NoteRecorder recorder;
-  
-  float factor = 1.0;
-  boolean hadAMajor = false;
-  
-  Times() {
-    
-  }
-  
+  String[] letters = {"T", "I", "M", "E", "S"};  
+  int startseconds;
+  int numRows = 6;
+  int numCols = 10;
+  int[][] squareYs = new int[numCols][numRows];
+  String[][] rectletters = new String[numCols][numRows];
+  int squareSize = 50;
+  int currentI = 9;
+  int currentJ = 5;
+  int lastFrame = 0;
+  boolean done = false;
+
   String getName() {
     return "Times";
   }
-  
+
   void on() {
-    camera.start();
-    smoothie = new Smoothie(0.15);
-    recorder = new NoteRecorder();
-    factor = 1.0;
+    done = false;
+    currentI = 9;
+    currentJ = 5;
+    for (int i = 0; i < numCols; i++) {
+      for (int j = 0; j < numRows; j++) {
+        //set the ypositions to the starting ones.
+        squareYs[i][j] = j*(squareSize + 5);
+        rectletters[i][j] = letters[int(random(letters.length))];
+      }
+    }
   }
   
   void off() {
-    camera.stop();
+
   }
-  
-  void chronosData(PVector vec) {
-    threshold = smoothie.get(map(vec.mag(), -200, 200, 0, 1) * factor);
-  }
-  
-  void noteOn(int channel, int pitch, int velocity) {
-    recorder.on(pitch, velocity);
-  }
-  
-  void noteOff(int channel, int pitch, int velocity) {
-    recorder.off(pitch);
-  }
-  
-  final float BASS_THRESHOLD = 0.7;
-  color col;
-      
-  boolean isAMajor() {
-    boolean a=false, cis=false, e=false;
-    for(Integer note : recorder.notes.keySet()) { // TODO: optimization?
-      switch(note % 12) {
-        case 9: // A
-          a = true;
-          break;
-        case 1: // C#
-          cis = true;
-          break; 
-        case 4: // E
-          e = true;
-          break;
-        default:
-          return false;
+
+  void draw() {
+    background(255);
+    int now = millis();
+    float deltaT = (float)(now - lastFrame) / 1000;
+    lastFrame = now;
+    int mspassed = now - startseconds;
+    //keep track of time.
+    if (mspassed >= 1000) {
+      //a second has passed.
+      startseconds = now;
+    }
+
+    if (!done) {
+      //make the current rectangle fall
+      squareYs[currentI][currentJ] += (450 / 5 * deltaT);
+      int endY = currentJ*(squareSize + 5) + 450;
+      if (squareYs[currentI][currentJ] >= endY) {
+        squareYs[currentI][currentJ] = endY;
+        currentJ--;
+        if (currentJ < 0) {
+          currentI--;
+          if (currentI < 0) {
+            done = true;
+          }
+          currentJ = 5;
+        }
       }
     }
-    return a && cis && e;
+
+    textAlign(CENTER);
+    textSize(squareSize * 0.9);
+    //draw all the rectangles
+    for (int i = 0; i < numCols; i++) {
+      for (int j = 0; j < numRows; j++) {
+        //set the ypositions to the starting ones.
+        fill(0);
+        noStroke();
+        int x = 150 + (i * (squareSize+5));
+        int y = squareYs[i][j];
+        rect(x, y, squareSize, squareSize);
+        fill(255);
+        text(rectletters[i][j], x+squareSize/2, y+squareSize - 8);
+      }
+    }
   }
-  
-  float lastBassNotes = MAX_INT;
-  
-  float INCREASE = 0.02;
-  
-  void draw() {
-    if (camera.cam1.available()) {
-      camera.cam1.read();
-      // workaround for https://github.com/processing/processing/issues/1852.html
-      camera.cam1.loadPixels();
-    }
-    PImage im = camera.cam1.get();
-    
-    im.resize(width, height);
-    im.filter(THRESHOLD, threshold);
-    
-    // ending detector
-    boolean isA = false;
-    try {
-      isA = isAMajor();
-    } catch (ConcurrentModificationException e) {
-      println("Ignored ConcurrentModification");
-    }
-    if(isA) {
-      //factor *= 0.99;
-      if(!hadAMajor) println("A detected ...");
-      factor += INCREASE;
-      hadAMajor = true;
-    } else if(hadAMajor) {
-      factor -= INCREASE;
-      if(abs(factor - 1) < 0.01) {
-        factor = 1.0;
-        hadAMajor = false;
-        println("Back to reality.");
-      } 
-    }
-        
-    float val = 0;
-    if(recorder.bassNotes > 0) {
-      val = map(recorder.bassNotes * recorder.averageVelocity, 0, recorder.bassNotes * 127, 0, 1);
-      if(recorder.bassNotes < lastBassNotes) {
-        val = 0;
-        lastBassNotes = recorder.bassNotes;
-      } 
-    }
-    tint(bassMachine.getColor(val));
-    if(val >= BASS_THRESHOLD) {
-      im.blend(headImage, 0, 0, width, height,  0, 0, width, height, LIGHTEST);
-    }
-    image(im, 0, 0);
-  }
+
 }
