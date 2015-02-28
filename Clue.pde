@@ -13,7 +13,7 @@ class Clue extends Song {
   }
 
   void draw() {
-    image(videos.clue, 0, 0);
+    image(videos.clue, 0, 0, width, height);
   }
   
   String getName() {

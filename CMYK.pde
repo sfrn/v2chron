@@ -10,6 +10,7 @@ class CMYK extends Song {
   }
 
   void draw() {
+    rectMode(CORNER);
     int rectwidth = width/3;
     noStroke();
     fill(#fcee2d);

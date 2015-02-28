@@ -38,6 +38,7 @@ class Times extends Song {
 
   void draw() {
     background(255);
+    rectMode(CORNER);
     int now = millis();
     float deltaT = (float)(now - lastFrame) / 1000;
     lastFrame = now;
@@ -50,8 +51,8 @@ class Times extends Song {
 
     if (!done) {
       //make the current rectangle fall
-      squareYs[currentI][currentJ] += (450 / 5 * deltaT);
-      int endY = currentJ*(squareSize + 5) + 450;
+      squareYs[currentI][currentJ] += (200 / 5 * deltaT);
+      int endY = currentJ*(squareSize + 5) + 200;
       if (squareYs[currentI][currentJ] >= endY) {
         squareYs[currentI][currentJ] = endY;
         currentJ--;

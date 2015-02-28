@@ -13,7 +13,7 @@ Midi midi;
 Videos videos;
 OSC osc;
 
-float FPS = 25;
+float FPS = 20;
 boolean doFadeout = false;
 float fadeoutFactor = 1.0;
 
@@ -21,8 +21,11 @@ int nextSongToChoose = -1;
 
 PApplet applet;
 
+float RATIO = (2.94/1.70);
+int WIDTH = 1024;
+
 void setup() {
-  size(1024, 768, P3D);
+  size(WIDTH, (int)(WIDTH/RATIO), P3D);
 
   frameRate(FPS);
   
@@ -54,7 +57,7 @@ void setup() {
   songs.add(new Times());
   songs.add(new Childrens());
   songs.add(new Parents());
-  songs.add(new VideoExploding());
+  //songs.add(new VideoExploding());
   //songs.add(new Tetris());
   //songs.add(new Jesus());
   songs.add(new Clue());
