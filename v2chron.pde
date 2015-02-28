@@ -31,7 +31,7 @@ void setup() {
   camera = new Camera();  
   liveSound = new LiveSound();
   bassMachine = new BassMachine();
-  chronos = new Chronos();
+  //chronos = new Chronos();
   osc = new OSC();
   midi = new Midi();
   videos = new Videos();
@@ -50,7 +50,7 @@ void setup() {
   
   songs = new ArrayList<Song>();
   songs.add(new Nix());
-  songs.add(new FrobilausenExploding());
+  songs.add(new CMYK());
   songs.add(new Childrens());
   songs.add(new Parents());
   songs.add(new VideoExploding());
@@ -84,7 +84,7 @@ void initiateFadeout() {
 
 void draw() {
 //  liveSound.step();
-  chronos.step();
+//  chronos.step();
   song.draw();
   if(doFadeout) {
     fill(0, fadeoutFactor);

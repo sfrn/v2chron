@@ -1,16 +1,15 @@
 class Clue extends Song {
   Clue() {
     super();
+    videos.loadClue();
   }
   
   void on() {
-    videos.loadClue();
     videos.clue.loop();
   }
   
   void off() {
     videos.clue.stop();
-    videos.unloadClue();
   }
 
   void draw() {
