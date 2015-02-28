@@ -3,7 +3,7 @@ import java.util.Set;
 import java.util.ConcurrentModificationException;
 
 class Times extends Song {
-  String[] letters = {"T", "I", "M", "E", "S"};  
+  String[] letters = {"H", "E", "I", "M", "A", "T"};  
   int startseconds;
   int numRows = 6;
   int numCols = 10;
@@ -27,7 +27,7 @@ class Times extends Song {
       for (int j = 0; j < numRows; j++) {
         //set the ypositions to the starting ones.
         squareYs[i][j] = j*(squareSize + 5);
-        rectletters[i][j] = letters[int(random(letters.length))];
+        rectletters[i][j] = letters[(j * numCols + i) % letters.length];
       }
     }
   }
