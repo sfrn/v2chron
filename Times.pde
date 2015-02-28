@@ -5,15 +5,19 @@ import java.util.ConcurrentModificationException;
 class Times extends Song {
   String[] letters = {"H", "E", "I", "M", "A", "T"};  
   int startseconds;
-  int numRows = 6;
-  int numCols = 10;
-  int[][] squareYs = new int[numCols][numRows];
-  String[][] rectletters = new String[numCols][numRows];
+  int numRows;
+  int numCols;
+  int[][] squareYs;
+  String[][] rectletters;
+  int[] rows;
   int squareSize = 50;
-  int currentI = 9;
-  int currentJ = 5;
+  int currentI;
+  int currentJ;
   int lastFrame = 0;
+  float lastShuffle = 0;
+  float minShuffleTime = 100;
   boolean done = false;
+  Smoothie smoothie;
 
   String getName() {
     return "Times";
@@ -21,19 +25,41 @@ class Times extends Song {
 
   void on() {
     done = false;
-    currentI = 9;
-    currentJ = 5;
+    numRows = 6;
+    numCols = (int)floor(width / squareSize) - 1;
+    rectletters = new String[numCols][numRows];
+    rows = new int[numCols];
+    squareYs = new int[numCols][numRows];
+    smoothie = new Smoothie(0.3);
     for (int i = 0; i < numCols; i++) {
       for (int j = 0; j < numRows; j++) {
         //set the ypositions to the starting ones.
         squareYs[i][j] = j*(squareSize + 5);
         rectletters[i][j] = letters[(j * numCols + i) % letters.length];
       }
+      rows[i] = numRows - 1;
     }
+    currentI = (int)random(numCols);
+    lastFrame = millis();
   }
   
   void off() {
 
+  }
+  
+  void chronosData(PVector vec) {
+    double value = smoothie.get(vec.mag());
+    if(value > 100) {
+      if(millis() - lastShuffle > minShuffleTime) {
+        for (int i = 0; i < numCols; i++) {
+          for (int j = 0; j < numRows; j++) {
+            //set the ypositions to the starting ones.
+            rectletters[i][j] = letters[(int)(random(letters.length))];
+          }
+        }
+        lastShuffle = millis();
+      }
+    }
   }
 
   void draw() {
@@ -51,17 +77,14 @@ class Times extends Song {
 
     if (!done) {
       //make the current rectangle fall
-      squareYs[currentI][currentJ] += (200 / 5 * deltaT);
-      int endY = currentJ*(squareSize + 5) + 200;
-      if (squareYs[currentI][currentJ] >= endY) {
-        squareYs[currentI][currentJ] = endY;
-        currentJ--;
-        if (currentJ < 0) {
-          currentI--;
-          if (currentI < 0) {
-            done = true;
-          }
-          currentJ = 5;
+      int currentJ = rows[currentI];
+      if(currentJ >= 0) {
+        squareYs[currentI][currentJ] += (200 / 5 * deltaT);
+        int endY = currentJ*(squareSize + 5) + 200;
+        if (squareYs[currentI][currentJ] >= endY) {
+          squareYs[currentI][currentJ] = endY;
+          rows[currentI]--;
+          currentI = (int)random(numCols);
         }
       }
     }
@@ -74,7 +97,7 @@ class Times extends Song {
         //set the ypositions to the starting ones.
         fill(0);
         noStroke();
-        int x = 150 + (i * (squareSize+5));
+        int x = (i * (squareSize+5));
         int y = squareYs[i][j];
         rect(x, y, squareSize, squareSize);
         fill(255);
